@@ -12,4 +12,4 @@ Step 5 - Press enter on keyboard
 
 Step 6 - In folder double tap in main.html
 
-Step 7 - Enjoy Marmiton's results for your query
+Step 7 - Enjoy Marmiton's results of your query
