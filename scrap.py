@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+import json
 
 search=input("Nom d'une recette, un ingrédient, autre: ")
 #city=input("Entrez la ville : ")
@@ -60,6 +61,8 @@ file.write(f'''<header>
 </header>
 <main>''')
 
+datas = []
+
 i = 1
 
 for counter in range(1, 10):
@@ -78,6 +81,7 @@ for counter in range(1, 10):
         star_state_1 = result.find("svg",class_="SHRD__sc-sr6s0j-1 cuxuXS")
         star_state_2 = result.find("svg",class_="SHRD__sc-sr6s0j-2 eHPLKd")
         star_state_3 = result.find("svg",class_="SHRD__sc-sr6s0j-0 gwcoTh")
+        rate = result.find("span",class_="SHRD__sc-10plygc-0 jHwZwD")
         things = result.find("div",class_="MRTN__sc-30rwkm-3 fyhZvB")
 
         if (i%6 == 0) or (i==1):
@@ -104,12 +108,20 @@ for counter in range(1, 10):
         </div>
         </div>
         </a></div>''')
+        if sponsor:
+            datas.append({'id':i,'name':title.text,'rate':rate.text,'things':things.text,'sponsor':sponsor.text,'picture_src':picture['src']})
+        else:
+            datas.append({'id':i,'name':title.text,'rate':rate.text,'things':things.text,'picture_src':picture['src']})
 
         if (i%5 == 0) and (i!=1):
             file.write(f'''</div>''')
             i=0
 
         i+=1
+datas_gen = {'results':{'search_key':title_search.text,'search_results_number':results_number.text,'recipes': datas}}
+json_string=json.dumps(datas_gen)
+with open('json_data.json', 'w', encoding='utf8') as outfile:
+    json.dump(json_string, outfile)
 
 file.write('''</main>
     </div>
